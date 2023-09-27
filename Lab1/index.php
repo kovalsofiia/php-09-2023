@@ -11,6 +11,7 @@
 //1. Асоціативний масив “Бухгалтерія” (Код, ПІБ; посада; заробітна плата; кількість дітей; стаж).
 // Запит працюючих, які обіймають посаду Х і мають не більше, ніж Y дітей.
 
+$error_message = null;
 
 $financeDepartment = [
     'code' => null,
@@ -80,7 +81,29 @@ $financeDepartments = [
     ]
 ];
 
-
+//added correct form for changes in array
+if(isset($_POST['editCode'])){
+    $editKey = null;
+    foreach($financeDepartments as $key => $value){
+        if ($value['code'] == $_POST['editCode']){
+            $editKey = $key;
+            break;
+        }
+    }
+    if (!is_null($editKey) && !empty($_POST['editFullName']) && !empty($_POST['editPosition']) && !empty($_POST['editSalary']) && $_POST['editSalary'] > 0 && !empty($_POST['editChildrenAmount']) && !empty($_POST['editWorkExperience'])) {
+        $financeDepartments[$editKey] = array_merge($financeDepartments[$editKey],  [
+            'fullName' => $_POST['editFullName'] ?? '',
+            'position' => $_POST['editPosition'] ?? '',
+            'salary' => $_POST['editSalary'] ?? '',
+            'childrenAmount' => $_POST['editChildrenAmount'] ?? '',
+            'workExperience' => $_POST['editWorkExperience'] ?? '',
+        ]);
+    }
+    else{
+        $error_message =  "Not found or something is empty.";
+    }
+}
+//=====================================
 if(isset($_POST['code'])){
     $financeDepartments[] = [
         'code' => $_POST['code'] ?? '',
@@ -106,3 +129,7 @@ $financeDepartments = array_filter($financeDepartments, function ($element){
 include 'templates/finDeptTable.phtml';
 include 'templates/finDeptCreateForm.phtml';
 include 'templates/finDeptChangeForm.phtml';
+
+if ($error_message ){
+    print $error_message;
+}

@@ -2,14 +2,14 @@
     <hr>
     <p>Edit employee information below. Please enter the employee code to edit.</p>
 
-    <label for="editCode">Employee Code</label>
-    <input name="editCode" type="text" id="editCode">
+    <label for="editCodeUser">Employee Code</label>
+    <input name="editCodeUser" type="text" id="editCodeUser">
     <button type="submit">Find Employee</button>
 </form>
 
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $editCode = $_POST["editCode"];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["editCodeUser"])) {
+    $editCode = $_POST["editCodeUser"];
     $employeeToEdit = findAnEmployeeByCode($financeDepartments, $editCode);
 
     if ($employeeToEdit) {
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </form>
         <?php
     } else {
-        echo "Employee not found with code: $editCode";
+        $error_message =  "Employee not found with code: $editCode";
     }
 }
 
@@ -44,7 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 function findAnEmployeeByCode($array, $code)
 {
     foreach ($array as $employee) {
-        if ($employee['code'] == $code) {
+
+        if (isset($employee['code']) && $employee['code'] == $code) {
             return $employee;
         }
     }
