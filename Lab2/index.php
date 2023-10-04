@@ -22,64 +22,93 @@ $financeDepartment = [
     'workExperience' => null
 ];
 
-$financeDepartments = [
-    [
-        'code' => 1,
-        'fullName' => 'Corina Holland',
-        'position' => 'Payroll Clerk',
-        'salary' => 600,
-        'childrenAmount' => 1,
-        'workExperience' => 1.5
-   ],
-    [
-        'code' => 2,
-        'fullName' => 'Bill Hoover',
-        'position' => 'Junior Financial Analyst',
-        'salary' => 450,
-        'childrenAmount' => 0,
-        'workExperience' => 1
-    ],
-    [
-        'code' => 3,
-        'fullName' => 'Herbert Strickland',
-        'position' => 'Financial Advisor Assistant',
-        'salary' => 1575,
-        'childrenAmount' => 3,
-        'workExperience' => 8
-    ],
-    [
-        'code' => 4,
-        'fullName' => 'Becky Malone',
-        'position' => 'Finance Manager',
-        'salary' => 1330,
-        'childrenAmount' => 2,
-        'workExperience' => 11
-    ],
-    [
-        'code' => 5,
-        'fullName' => 'Laverne Lucero',
-        'position' => 'Economist',
-        'salary' => 395,
-        'childrenAmount' => 0,
-        'workExperience' => 0.5
-    ],
-    [
-        'code' => 6,
-        'fullName' => 'Emory Howe',
-        'position' => 'Budget Analyst',
-        'salary' => 620,
-        'childrenAmount' => 0,
-        'workExperience' => 4
-    ],
-    [
-        'code' => 7,
-        'fullName' => 'Eunice Blanchard',
-        'position' => 'Senior Finance Analyst',
-        'salary' => 1165,
-        'childrenAmount' => 3,
-        'workExperience' => 6
-    ]
-];
+
+//filename and mode r for reading from file
+$filePath2 = 'employees2.txt';
+$file = fopen($filePath2, 'r');
+
+if ($file) {
+    while (!feof($file)) { //reads till the end of document
+        $line = fgets($file);
+        //splits each string into an element for making an array
+        $fields = explode(', ', $line);
+
+        if (count($fields) == 6) {
+            $object = [
+                'code' => $fields[0],
+                'fullName' => $fields[1],
+                'position' => $fields[2],
+                'salary' => $fields[3],
+                'childrenAmount' => $fields[4],
+                'workExperience' => $fields[5]
+            ];
+            $financeDepartments[] = $object;
+        }
+    }
+    fclose($file);
+} else {
+    echo "Failed to open a file and download infos.";
+}
+
+
+//$financeDepartments = [
+//    [
+//        'code' => 1,
+//        'fullName' => 'Corina Holland',
+//        'position' => 'Payroll Clerk',
+//        'salary' => 600,
+//        'childrenAmount' => 1,
+//        'workExperience' => 1.5
+//   ],
+//    [
+//        'code' => 2,
+//        'fullName' => 'Bill Hoover',
+//        'position' => 'Junior Financial Analyst',
+//        'salary' => 450,
+//        'childrenAmount' => 0,
+//        'workExperience' => 1
+//    ],
+//    [
+//        'code' => 3,
+//        'fullName' => 'Herbert Strickland',
+//        'position' => 'Financial Advisor Assistant',
+//        'salary' => 1575,
+//        'childrenAmount' => 3,
+//        'workExperience' => 8
+//    ],
+//    [
+//        'code' => 4,
+//        'fullName' => 'Becky Malone',
+//        'position' => 'Finance Manager',
+//        'salary' => 1330,
+//        'childrenAmount' => 2,
+//        'workExperience' => 11
+//    ],
+//    [
+//        'code' => 5,
+//        'fullName' => 'Laverne Lucero',
+//        'position' => 'Economist',
+//        'salary' => 395,
+//        'childrenAmount' => 0,
+//        'workExperience' => 0.5
+//    ],
+//    [
+//        'code' => 6,
+//        'fullName' => 'Emory Howe',
+//        'position' => 'Budget Analyst',
+//        'salary' => 620,
+//        'childrenAmount' => 0,
+//        'workExperience' => 4
+//    ],
+//    [
+//        'code' => 7,
+//        'fullName' => 'Eunice Blanchard',
+//        'position' => 'Senior Finance Analyst',
+//        'salary' => 1165,
+//        'childrenAmount' => 3,
+//        'workExperience' => 6
+//    ]
+//];
 
 //added correct form for changes in array
 if(isset($_POST['editCode'])){
@@ -135,12 +164,12 @@ if ($error_message ){
 }
 
 
-//added methods for saving data from financeDepartments array to txt and for downloading data from txt to php file
+//LAB2 added methods for saving data from financeDepartments array to txt and for downloading data from txt to php file
+
 
 //filename and mode w for writing data to file
-$filePath = 'employees.txt';
+$filePath = 'employees2.txt';
 $file = fopen($filePath, 'w');
-
 
 if ($file) {
     foreach ($financeDepartments as $object) {
@@ -151,31 +180,4 @@ if ($file) {
     fclose($file);
 } else {
     echo "Failed to open a file and write infos.";
-}
-
-//filename and mode r for reading from file
-$filePath = 'employees.txt';
-$file = fopen($filePath, 'r');
-
-if ($file) {
-    while (!feof($file)) { //reads till the end of document
-        $line = fgets($file);
-        //splits each string into an element for making an array
-        $fields = explode(', ', $line);
-
-        if (count($fields) == 6) {
-            $object = [
-                'code' => $fields[0],
-                'fullName' => $fields[1],
-                'position' => $fields[2],
-                'salary' => $fields[3],
-                'childrenAmount' => $fields[4],
-                'workExperience' => $fields[5]
-            ];
-            $financeDepartments[] = $object;
-        }
-    }
-fclose($file);
-} else {
-    echo "Failed to open a file and download infos.";
 }
